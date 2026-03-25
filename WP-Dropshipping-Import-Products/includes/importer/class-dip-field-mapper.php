@@ -146,8 +146,101 @@ class DIP_Field_Mapper {
 	}
 
 	/**
+	 * Extract all values for a source path as a flat list of strings.
+	 * Unlike extract(), this does NOT aggregate list fields to their first/max element.
+	 * Used for multi-value targets such as gallery_images where every URL is needed.
+	 *
+	 * Handles:
+	 *  - CSV records where a \n-normalised cell is already an array of strings.
+	 *  - XML records where a repeated element is already an array.
+	 *  - Raw strings that still contain \n (non-normalised CSVs / custom parsers).
+	 *
+	 * @param array<string,mixed> $record
+	 * @return list<string>
+	 */
+	public static function extract_list( array $record, string $source_path ): array {
+		$parts = str_contains( $source_path, '.' )
+			? explode( '.', $source_path )
+			: [ $source_path ];
+		$raw = self::extract_parts_preserve( $record, $parts );
+		return self::flatten_to_strings( $raw );
+	}
+
+	/**
+	 * Recursive traversal that does NOT aggregate list nodes — returns the raw
+	 * structure so the caller can inspect all leaves (used by extract_list()).
+	 *
+	 * @param mixed        $value
+	 * @param list<string> $parts
+	 */
+	private static function extract_parts_preserve( mixed $value, array $parts ): mixed {
+		if ( empty( $parts ) ) {
+			return $value;
+		}
+
+		// List node mid-path: collect results from every item.
+		if ( is_array( $value ) && array_is_list( $value ) ) {
+			$results = [];
+			foreach ( $value as $item ) {
+				if ( is_array( $item ) ) {
+					$sub = self::extract_parts_preserve( $item, $parts );
+					if ( null !== $sub && '' !== $sub ) {
+						$results[] = $sub;
+					}
+				}
+			}
+			return $results ?: null;
+		}
+
+		if ( ! is_array( $value ) ) {
+			return null;
+		}
+
+		$part = array_shift( $parts );
+		if ( ! array_key_exists( $part, $value ) ) {
+			return null;
+		}
+
+		return self::extract_parts_preserve( $value[ $part ], $parts );
+	}
+
+	/**
+	 * Flatten any nested structure to a list of non-empty strings.
+	 * Also splits raw strings that contain \n (fallback for non-normalised CSVs).
+	 *
+	 * @return list<string>
+	 */
+	private static function flatten_to_strings( mixed $value ): array {
+		if ( null === $value || '' === $value ) {
+			return [];
+		}
+		if ( is_string( $value ) ) {
+			if ( str_contains( $value, "\n" ) ) {
+				return array_values(
+					array_filter( array_map( 'trim', explode( "\n", $value ) ) )
+				);
+			}
+			return [ $value ];
+		}
+		if ( is_int( $value ) || is_float( $value ) ) {
+			return [ (string) $value ];
+		}
+		if ( is_array( $value ) ) {
+			$result = [];
+			foreach ( $value as $item ) {
+				$result = array_merge( $result, self::flatten_to_strings( $item ) );
+			}
+			return $result;
+		}
+		return [];
+	}
+
+	/**
 	 * Apply a saved mapping config to a raw record.
 	 * Returns a normalised product data array ready for the processor.
+	 *
+	 * For the gallery_images target, extract_list() is used so that all image URLs
+	 * (from a \n-separated IOF CSV cell or repeated XML elements) are preserved.
 	 *
 	 * @param array<string,mixed> $record
 	 * @param array<string,mixed> $mapping  [ target_field => [ 'source' => '...', 'default' => '...' ], ... ]
@@ -159,9 +252,16 @@ class DIP_Field_Mapper {
 			$source  = $cfg['source']  ?? '';
 			$default = $cfg['default'] ?? '';
 
-			$value = ( '' !== $source ) ? self::extract( $record, $source ) : null;
+			if ( '' !== $source ) {
+				// gallery_images needs all values; everything else uses first/max aggregation.
+				$value = ( 'gallery_images' === $target )
+					? self::extract_list( $record, $source )
+					: self::extract( $record, $source );
+			} else {
+				$value = null;
+			}
 
-			if ( null === $value || '' === $value ) {
+			if ( null === $value || '' === $value || [] === $value ) {
 				$value = $default;
 			}
 

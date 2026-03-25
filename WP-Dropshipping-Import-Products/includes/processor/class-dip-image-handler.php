@@ -53,16 +53,24 @@ class DIP_Image_Handler {
 	}
 
 	/**
-	 * Process a gallery value: pipe or comma-separated URLs.
+	 * Process a gallery value: pipe, comma, or newline-separated URLs, or an array.
+	 * IOF CSV uses newline (\n / hard enter) as the multi-value separator for image URLs.
 	 *
-	 * @param string|list<string> $value
+	 * @param string|list<string>|list<mixed> $value
 	 * @return list<int>  attachment IDs
 	 */
 	public static function process_gallery( $value ): array {
 		if ( is_string( $value ) ) {
-			$urls = array_filter( array_map( 'trim', (array) preg_split( '/[|,]/', $value ) ) );
+			// Split on pipe, comma, or newline (IOF CSV hard-enter multi-value separator).
+			$urls = array_filter( array_map( 'trim', preg_split( '/[|,\n]/', $value ) ?? [] ) );
+		} elseif ( is_array( $value ) ) {
+			// Already an array (normalised CSV or XML). Flatten nested arrays.
+			$urls = array_filter( array_map( 'strval', array_merge( ...array_map(
+				static fn( $v ): array => is_array( $v ) ? array_map( 'strval', $v ) : [ (string) $v ],
+				$value
+			) ) ) );
 		} else {
-			$urls = (array) $value;
+			$urls = [];
 		}
 
 		$ids = [];

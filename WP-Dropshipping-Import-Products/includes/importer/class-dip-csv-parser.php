@@ -54,7 +54,19 @@ class DIP_CSV_Parser {
 			if ( $headers ) {
 				$record = [];
 				foreach ( $headers as $i => $header ) {
-					$record[ $header ] = $row[ $i ] ?? '';
+					$cell = $row[ $i ] ?? '';
+					// IOF CSV multi-value fields use hard-enter (\n) as separator.
+					// Split them into arrays so the field mapper can aggregate correctly
+					// (e.g. max() for stock quantities, first element for SKU/price).
+					if ( is_string( $cell ) && str_contains( $cell, "\n" ) ) {
+						$cell = array_values(
+							array_filter(
+								array_map( 'trim', explode( "\n", $cell ) ),
+								static fn( string $v ): bool => '' !== $v
+							)
+						);
+					}
+					$record[ $header ] = $cell;
 				}
 			} else {
 				$record = $row;
