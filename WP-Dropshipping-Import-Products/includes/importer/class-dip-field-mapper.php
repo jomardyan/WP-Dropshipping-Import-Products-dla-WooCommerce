@@ -58,23 +58,89 @@ class DIP_Field_Mapper {
 	/**
 	 * Extract a field value from a raw record using a dot-notation path.
 	 *
+	 * When traversal encounters a list (multiple same-name sibling elements, e.g. several
+	 * <stock> warehouse entries or multiple <size> variants), the method recurses into every
+	 * list item and aggregates results: numeric values → max(); other values → first non-null.
+	 * This correctly handles IOF-style feeds where a field can be either a single dict or a
+	 * list depending on the product.
+	 *
 	 * @param array<string,mixed> $record
 	 */
 	public static function extract( array $record, string $source_path ): mixed {
-		if ( ! str_contains( $source_path, '.' ) ) {
-			return $record[ $source_path ] ?? null;
+		$parts = str_contains( $source_path, '.' )
+			? explode( '.', $source_path )
+			: [ $source_path ];
+		return self::extract_parts( $record, $parts );
+	}
+
+	/**
+	 * Recursive helper for extract().
+	 *
+	 * @param mixed        $value
+	 * @param list<string> $parts  Remaining path segments.
+	 */
+	private static function extract_parts( mixed $value, array $parts ): mixed {
+		if ( empty( $parts ) ) {
+			// If the final value is itself a list, aggregate it.
+			if ( is_array( $value ) && array_is_list( $value ) ) {
+				return self::aggregate_list( $value );
+			}
+			return $value;
 		}
 
-		$parts = explode( '.', $source_path );
-		$value = $record;
-		foreach ( $parts as $part ) {
-			if ( is_array( $value ) && array_key_exists( $part, $value ) ) {
-				$value = $value[ $part ];
-			} else {
+		// When we hit a list mid-path (e.g. multiple <size> or <stock> siblings),
+		// recurse into every item and aggregate the results.
+		if ( is_array( $value ) && array_is_list( $value ) ) {
+			$results = [];
+			foreach ( $value as $item ) {
+				if ( is_array( $item ) ) {
+					$sub = self::extract_parts( $item, $parts );
+					if ( null !== $sub && '' !== $sub ) {
+						$results[] = $sub;
+					}
+				}
+			}
+			if ( empty( $results ) ) {
 				return null;
 			}
+			return self::aggregate_list( $results );
 		}
-		return $value;
+
+		if ( ! is_array( $value ) ) {
+			return null;
+		}
+
+		$part = array_shift( $parts );
+		if ( ! array_key_exists( $part, $value ) ) {
+			return null;
+		}
+
+		return self::extract_parts( $value[ $part ], $parts );
+	}
+
+	/**
+	 * Aggregate a flat list of scalar values.
+	 * All-numeric lists → return max() (correct for stock quantities with -1 sentinel values).
+	 * Mixed / string lists → return first non-empty item.
+	 *
+	 * @param list<mixed> $list
+	 */
+	private static function aggregate_list( array $list ): mixed {
+		if ( empty( $list ) ) {
+			return null;
+		}
+		$scalars = array_filter( $list, 'is_scalar' );
+		if ( count( $scalars ) === count( $list ) ) {
+			$all_numeric = array_reduce(
+				$list,
+				static fn( bool $c, mixed $v ): bool => $c && is_numeric( $v ),
+				true
+			);
+			if ( $all_numeric ) {
+				return max( $list );
+			}
+		}
+		return $list[0];
 	}
 
 	/**

@@ -12,10 +12,17 @@ class DIP_Category_Handler {
 
 	/**
 	 * Ensure a category path exists and return the leaf term ID.
-	 * Path separator is " > " (with spaces). Single categories are also valid.
+	 *
+	 * Supported separators (auto-detected):
+	 *  - " > " or ">"  — default/configured format
+	 *  - "/"           — IOF / Polish shop XML format (e.g. "Modele RC/Ładowanie/Ładowarki")
+	 *
+	 * Single-level categories (no separator) are also valid.
 	 */
 	public static function get_or_create( string $category_path ): int {
-		$parts     = array_filter( array_map( 'trim', explode( '>', $category_path ) ) );
+		// Auto-detect separator: '>' takes priority; fall back to '/' for IOF feeds.
+		$separator = str_contains( $category_path, '>' ) ? '>' : '/';
+		$parts     = array_filter( array_map( 'trim', explode( $separator, $category_path ) ) );
 		$parent_id = 0;
 		$term_id   = 0;
 

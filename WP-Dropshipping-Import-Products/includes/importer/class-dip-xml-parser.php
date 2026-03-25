@@ -46,8 +46,11 @@ class DIP_XML_Parser {
 	}
 
 	/**
-	 * Heuristically detect the repeating item node name by sampling 300 elements.
-	 * Returns the element name at depth-1 that appears most frequently.
+	 * Heuristically detect the repeating item node name by sampling up to 500 elements.
+	 *
+	 * Strategy: find the shallowest depth > 0 where any element appears more than once
+	 * in the sample window. That element is the repeating record/item node.
+	 * Works correctly for deep feeds (e.g. IOF XML with namespaces and many levels).
 	 */
 	public static function detect_item_node( string $file_path ): string {
 		$reader = new \XMLReader();
@@ -57,27 +60,31 @@ class DIP_XML_Parser {
 
 		/** @var array<int, array<string,int>> $depth_count */
 		$depth_count = [];
-		$max_depth   = 0;
 		$i           = 0;
 
-		while ( $reader->read() && $i < 300 ) {
+		while ( $reader->read() && $i < 500 ) {
 			if ( \XMLReader::ELEMENT === $reader->nodeType ) {
 				$depth = $reader->depth;
 				$name  = $reader->localName;
-				if ( $depth > $max_depth ) {
-					$max_depth = $depth;
-				}
 				$depth_count[ $depth ][ $name ] = ( $depth_count[ $depth ][ $name ] ?? 0 ) + 1;
 			}
 			$i++;
 		}
 		$reader->close();
 
-		// Repeated element at (max_depth - 1) is the item container
-		$target_depth = max( 0, $max_depth - 1 );
-		if ( ! empty( $depth_count[ $target_depth ] ) ) {
-			arsort( $depth_count[ $target_depth ] );
-			return (string) array_key_first( $depth_count[ $target_depth ] );
+		// Walk depths from shallow to deep; first depth > 0 where any element
+		// appears more than once is the repeating item node.
+		ksort( $depth_count );
+		foreach ( $depth_count as $depth => $names ) {
+			if ( $depth < 1 ) {
+				continue;
+			}
+			arsort( $names );
+			$top_name  = (string) array_key_first( $names );
+			$top_count = $names[ $top_name ];
+			if ( $top_count > 1 ) {
+				return $top_name;
+			}
 		}
 
 		return 'product';
@@ -123,10 +130,14 @@ class DIP_XML_Parser {
 	private function node_to_array( \DOMNode $node ) {
 		$result = [];
 
-		// Node attributes
+		// Node attributes — use localName (drops namespace prefix) for clean dot-notation paths.
 		if ( $node->hasAttributes() && $node->attributes ) {
 			foreach ( $node->attributes as $attr ) {
-				$result[ '@' . $attr->name ] = $attr->value;
+				$key = '@' . $attr->localName;
+				// Avoid overwriting a non-namespaced attribute with a namespaced one of the same local name.
+				if ( ! isset( $result[ $key ] ) || '' === $attr->prefix ) {
+					$result[ $key ] = $attr->value;
+				}
 			}
 		}
 
