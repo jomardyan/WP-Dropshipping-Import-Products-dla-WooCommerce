@@ -118,7 +118,7 @@ class DIP_Admin_Feeds {
 
 			<?php self::render_notices(); ?>
 
-			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" id="dip-feed-form">
+			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" id="dip-feed-form" enctype="multipart/form-data">
 				<?php wp_nonce_field( 'dip_save_feed_' . $feed_id, 'dip_feed_nonce' ); ?>
 				<input type="hidden" name="action"  value="dip_save_feed">
 				<input type="hidden" name="feed_id" value="<?php echo $feed_id; ?>">
@@ -136,9 +136,29 @@ class DIP_Admin_Feeds {
 					<tr>
 						<th scope="row"><label for="dip_source_url"><?php esc_html_e( 'Source URL', 'dip' ); ?></label></th>
 						<td>
-							<input type="url" id="dip_source_url" name="dip_source_url" class="large-text"
-								value="<?php echo esc_attr( $feed['source_url'] ?? '' ); ?>" required>
-							<p class="description"><?php esc_html_e( 'Remote URL or absolute local path to the XML or CSV file.', 'dip' ); ?></p>
+							<input type="text" id="dip_source_url" name="dip_source_url" class="large-text"
+								value="<?php echo esc_attr( $feed['source_url'] ?? '' ); ?>">
+							<p class="description"><?php esc_html_e( 'Remote URL (http/https) to the feed file. Leave empty if uploading a file below.', 'dip' ); ?></p>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row"><label for="dip_source_file"><?php esc_html_e( 'Upload File', 'dip' ); ?></label></th>
+						<td>
+							<input type="file" id="dip_source_file" name="dip_source_file" accept=".xml,.csv">
+							<?php
+							$_current_src = $feed['source_url'] ?? '';
+							if ( $_current_src && ! preg_match( '#^https?://#', $_current_src ) && file_exists( $_current_src ) ) :
+							?>
+							<p class="description">
+								<?php printf(
+									/* translators: %s: filename */
+									esc_html__( 'Currently using uploaded file: %s. Upload a new file to replace it.', 'dip' ),
+									'<code>' . esc_html( basename( $_current_src ) ) . '</code>'
+								); ?>
+							</p>
+							<?php else : ?>
+							<p class="description"><?php esc_html_e( 'Upload an XML or CSV file from your computer. Overrides the URL above when provided.', 'dip' ); ?></p>
+							<?php endif; ?>
 						</td>
 					</tr>
 					<tr>
@@ -451,9 +471,44 @@ class DIP_Admin_Feeds {
 
 		// ── Sanitise basic fields ────────────────────────────────────────────
 		$name        = sanitize_text_field( wp_unslash( $_POST['dip_name'] ?? '' ) );
-		$source_url  = esc_url_raw( wp_unslash( $_POST['dip_source_url'] ?? '' ) );
 		$source_type = sanitize_key( $_POST['dip_source_type'] ?? 'xml' );
 		$status      = sanitize_key( $_POST['dip_status'] ?? 'active' );
+
+		// Accept both http(s):// URLs and absolute server paths.
+		$source_url_raw = wp_unslash( $_POST['dip_source_url'] ?? '' );
+		$source_url     = preg_match( '#^https?://#i', $source_url_raw )
+			? esc_url_raw( $source_url_raw )
+			: sanitize_text_field( $source_url_raw );
+
+		// ── Handle optional file upload ──────────────────────────────────────
+		$uploaded_file_error = (int) ( $_FILES['dip_source_file']['error'] ?? UPLOAD_ERR_NO_FILE );
+		if ( ! empty( $_FILES['dip_source_file']['name'] ) && UPLOAD_ERR_OK === $uploaded_file_error ) {
+			$raw_name = sanitize_file_name( wp_unslash( $_FILES['dip_source_file']['name'] ) );
+			$file_ext = strtolower( pathinfo( $raw_name, PATHINFO_EXTENSION ) );
+			if ( in_array( $file_ext, [ 'xml', 'csv' ], true ) ) {
+				$upload_dir = wp_upload_dir();
+				$feed_dir   = trailingslashit( $upload_dir['basedir'] ) . 'dip-feeds';
+				wp_mkdir_p( $feed_dir );
+				// Deny direct web access to the feed storage directory.
+				$htaccess = $feed_dir . '/.htaccess';
+				if ( ! file_exists( $htaccess ) ) {
+					// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
+					file_put_contents( $htaccess, "Options -Indexes\ndeny from all\n" );
+				}
+				$filename    = uniqid( 'feed_', true ) . '.' . $file_ext;
+				$target_path = $feed_dir . '/' . $filename;
+				if ( move_uploaded_file( $_FILES['dip_source_file']['tmp_name'], $target_path ) ) {
+					// Remove the old uploaded file if it was stored in our directory.
+					if ( $source_url && ! preg_match( '#^https?://#', $source_url )
+						&& str_starts_with( $source_url, $feed_dir )
+						&& file_exists( $source_url ) ) {
+						// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+						@unlink( $source_url );
+					}
+					$source_url = $target_path;
+				}
+			}
+		}
 
 		if ( empty( $name ) || empty( $source_url ) ) {
 			wp_redirect( add_query_arg( 'dip_error', 'missing_fields', wp_get_referer() ?: admin_url( 'admin.php?page=dip-feeds' ) ) );

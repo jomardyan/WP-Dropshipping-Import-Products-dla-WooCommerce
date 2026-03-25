@@ -171,8 +171,15 @@ class DIP_Product_Processor {
 
 		// ── Stock ────────────────────────────────────────────────────────────
 		if ( $can_update( 'stock_quantity' ) && isset( $product_data['stock_quantity'] ) && '' !== (string) $product_data['stock_quantity'] ) {
-			$product->set_manage_stock( true );
-			$product->set_stock_quantity( (int) $product_data['stock_quantity'] );
+			$qty = (int) $product_data['stock_quantity'];
+			if ( -1 === $qty ) {
+				// IOF sentinel: -1 means unlimited / not tracked by this warehouse.
+				$product->set_manage_stock( false );
+				$product->set_stock_status( 'instock' );
+			} else {
+				$product->set_manage_stock( true );
+				$product->set_stock_quantity( max( 0, $qty ) );
+			}
 		}
 		if ( $can_update( 'stock_status' ) && ! empty( $product_data['stock_status'] ) ) {
 			$product->set_stock_status( sanitize_key( $product_data['stock_status'] ) );
@@ -243,6 +250,11 @@ class DIP_Product_Processor {
 		}
 		if ( ! empty( $product_data['custom_id'] ) ) {
 			$product->update_meta_data( '_dip_custom_id', sanitize_text_field( $product_data['custom_id'] ) );
+		}
+
+		// ── SRP / compare-at price ───────────────────────────────────────────
+		if ( $can_update( 'srp_price' ) && isset( $product_data['srp_price'] ) && '' !== (string) $product_data['srp_price'] ) {
+			$product->update_meta_data( '_dip_srp_price', wc_format_decimal( $product_data['srp_price'] ) );
 		}
 
 		// ── Custom meta fields ───────────────────────────────────────────────

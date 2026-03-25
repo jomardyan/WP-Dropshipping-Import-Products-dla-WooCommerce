@@ -52,6 +52,8 @@ class DIP_Field_Mapper {
 			'meta_ean'           => __( 'EAN / GTIN', 'dip' ),
 			'meta_brand'         => __( 'Brand', 'dip' ),
 			'custom_id'          => __( 'Custom Unique ID (for matching)', 'dip' ),
+			// Price reference
+			'srp_price'          => __( 'Suggested Retail Price — SRP (stored as _dip_srp_price meta)', 'dip' ),
 		];
 	}
 
