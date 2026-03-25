@@ -1,0 +1,92 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  php-tests:
+    name: PHP ${{ matrix.php }} / WP ${{ matrix.wp }}
+    runs-on: ubuntu-24.04
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php: [ '8.0', '8.1', '8.2', '8.3' ]
+        wp:  [ '6.4', '6.6', 'latest' ]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up PHP ${{ matrix.php }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: mbstring, xml, dom
+          coverage: none
+
+      - name: Cache Composer packages
+        uses: actions/cache@v4
+        with:
+          path: WP-Dropshipping-Import-Products/vendor
+          key: composer-${{ matrix.php }}-${{ hashFiles('WP-Dropshipping-Import-Products/composer.lock') }}
+          restore-keys: composer-${{ matrix.php }}-
+
+      - name: Install Composer dependencies
+        run: composer install --no-progress --prefer-dist --no-interaction
+        working-directory: WP-Dropshipping-Import-Products
+
+      - name: Run unit tests
+        run: ./vendor/bin/phpunit --testsuite unit --no-coverage
+        working-directory: WP-Dropshipping-Import-Products
+
+  php-lint:
+    name: PHP Code Standards
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up PHP 8.2
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring
+          coverage: none
+          tools: cs2pr
+
+      - name: Install Composer dependencies
+        run: composer install --no-progress --prefer-dist --no-interaction
+        working-directory: WP-Dropshipping-Import-Products
+
+      - name: Run PHPCS
+        continue-on-error: true
+        run: ./vendor/bin/phpcs --report=checkstyle | cs2pr
+        working-directory: WP-Dropshipping-Import-Products
+
+  js-lint:
+    name: JavaScript Lint
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: WP-Dropshipping-Import-Products/package-lock.json
+
+      - name: Install npm packages
+        run: npm ci
+        working-directory: WP-Dropshipping-Import-Products
+
+      - name: Run ESLint
+        run: npm run lint:js
+        working-directory: WP-Dropshipping-Import-Products

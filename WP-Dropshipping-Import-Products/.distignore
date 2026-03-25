@@ -1,0 +1,19 @@
+# files to exclude from the distributed build package
+tests/
+vendor/
+node_modules/
+.github/
+composer.json
+composer.lock
+phpunit.xml
+phpstan.neon.dist
+phpcs.xml.dist
+package.json
+package-lock.json
+.eslintrc.json
+.stylelintrc.json
+.distignore
+GAPS_REPORT.md
+Prompt.md
+Standards.md
+description.md

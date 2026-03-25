@@ -163,4 +163,24 @@ class DIP_DB {
 			$wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->prefix}dip_logs WHERE run_id = %d", $run_id )
 		);
 	}
+
+	/**
+	 * Delete log entries older than $days days.
+	 *
+	 * @return int Number of rows deleted.
+	 */
+	public static function delete_old_logs( int $days ): int {
+		if ( $days <= 0 ) {
+			return 0;
+		}
+		global $wpdb;
+		$cutoff = gmdate( 'Y-m-d H:i:s', time() - $days * DAY_IN_SECONDS );
+		$wpdb->query(
+			$wpdb->prepare(
+				"DELETE FROM {$wpdb->prefix}dip_logs WHERE created_at < %s",
+				$cutoff
+			)
+		);
+		return (int) $wpdb->rows_affected;
+	}
 }

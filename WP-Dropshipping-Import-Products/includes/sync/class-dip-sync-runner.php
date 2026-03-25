@@ -8,8 +8,8 @@ defined( 'ABSPATH' ) || exit;
  */
 class DIP_Sync_Runner {
 
-	/** Number of records to process per chunk before resetting the time limit. */
-	private const CHUNK_SIZE = 50;
+	/** Fallback number of records per chunk when no setting is configured. */
+	private const DEFAULT_CHUNK_SIZE = 50;
 
 	/**
 	 * Run an import for a feed.
@@ -61,14 +61,18 @@ class DIP_Sync_Runner {
 			// ── Clear caches before run ──────────────────────────────────────
 			DIP_Category_Handler::clear_cache();
 
+			$global   = (array) get_option( 'dip_global_settings', [] );
+			$chunk    = isset( $global['batch_size'] ) ? (int) $global['batch_size'] : self::DEFAULT_CHUNK_SIZE;
+			$chunk    = max( 1, $chunk );
+
 			// ── Process records ──────────────────────────────────────────────
 			foreach ( $generator as $index => $record ) {
 				$product_data = DIP_Field_Mapper::map( $record, $mapping );
 				$result       = DIP_Product_Processor::process( $product_data, $settings, $logger, $index );
 				$counts[ $result . '_count' ]++;
 
-				// Reset time limit every CHUNK_SIZE records
-				if ( 0 === $index % self::CHUNK_SIZE ) {
+				// Reset time limit every $chunk records
+				if ( 0 === $index % $chunk ) {
 					if ( function_exists( 'wc_set_time_limit' ) ) {
 						wc_set_time_limit( 0 );
 					}

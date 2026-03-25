@@ -1,0 +1,17 @@
+{
+    "name": "dropshipping-import-products",
+    "version": "1.0.0",
+    "description": "Dropshipping Import Products dla WooCommerce — build tooling",
+    "private": true,
+    "scripts": {
+        "lint:js": "eslint assets/js/",
+        "lint:css": "stylelint assets/css/**/*.css",
+        "lint": "npm run lint:js && npm run lint:css"
+    },
+    "devDependencies": {
+        "@wordpress/eslint-plugin": "^21.0.0",
+        "eslint": "^8.57.0",
+        "stylelint": "^16.0.0",
+        "stylelint-config-wordpress": "^1.0.0"
+    }
+}

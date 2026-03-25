@@ -46,6 +46,9 @@ class DIP_Plugin {
 		// Scheduler
 		require_once DIP_DIR . 'includes/scheduler/class-dip-scheduler.php';
 
+		// REST API
+		require_once DIP_DIR . 'includes/api/class-dip-rest-api.php';
+
 		// Admin — only in admin context
 		if ( is_admin() ) {
 			require_once DIP_DIR . 'includes/admin/class-dip-admin-settings.php';
@@ -57,6 +60,7 @@ class DIP_Plugin {
 
 	private function init_hooks(): void {
 		DIP_Scheduler::init();
+		DIP_REST_API::init();
 
 		if ( is_admin() ) {
 			DIP_Admin::init();

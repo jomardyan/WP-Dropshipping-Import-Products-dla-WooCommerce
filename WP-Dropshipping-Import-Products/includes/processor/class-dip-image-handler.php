@@ -29,7 +29,11 @@ class DIP_Image_Handler {
 		require_once ABSPATH . 'wp-admin/includes/file.php';
 		require_once ABSPATH . 'wp-admin/includes/media.php';
 
-		$tmp = download_url( $url, 30 );
+		$global  = (array) get_option( 'dip_global_settings', [] );
+		$timeout = isset( $global['image_timeout'] ) ? (int) $global['image_timeout'] : 30;
+		$timeout = max( 5, $timeout );
+
+		$tmp = download_url( $url, $timeout );
 		if ( is_wp_error( $tmp ) ) {
 			return 0;
 		}

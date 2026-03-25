@@ -52,6 +52,26 @@ class DIP_Admin_Settings {
 					</tr>
 					<tr>
 						<th scope="row">
+							<label for="dip_batch_size"><?php esc_html_e( 'Import Batch Size', 'dip' ); ?></label>
+						</th>
+						<td>
+							<input type="number" id="dip_batch_size" name="dip_batch_size" min="10" max="500"
+								value="<?php echo absint( $settings['batch_size'] ?? 50 ); ?>">
+							<p class="description"><?php esc_html_e( 'Number of products to process per chunk before resetting the time limit. Default: 50.', 'dip' ); ?></p>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row">
+							<label for="dip_image_timeout"><?php esc_html_e( 'Image Download Timeout (s)', 'dip' ); ?></label>
+						</th>
+						<td>
+							<input type="number" id="dip_image_timeout" name="dip_image_timeout" min="5" max="300"
+								value="<?php echo absint( $settings['image_timeout'] ?? 30 ); ?>">
+							<p class="description"><?php esc_html_e( 'Timeout in seconds for downloading individual product images. Default: 30.', 'dip' ); ?></p>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row">
 							<?php esc_html_e( 'Debug Mode', 'dip' ); ?>
 						</th>
 						<td>
@@ -105,6 +125,8 @@ class DIP_Admin_Settings {
 		$settings = [
 			'timeout'             => absint( $_POST['dip_timeout']             ?? 60 ),
 			'log_retention'       => absint( $_POST['dip_log_retention']       ?? 30 ),
+			'batch_size'          => min( 500, max( 10, absint( $_POST['dip_batch_size']     ?? 50 ) ) ),
+			'image_timeout'       => min( 300, max( 5,  absint( $_POST['dip_image_timeout']  ?? 30 ) ) ),
 			'debug_mode'          => ! empty( $_POST['dip_debug_mode'] ),
 			'delete_on_uninstall' => ! empty( $_POST['dip_delete_on_uninstall'] ),
 		];

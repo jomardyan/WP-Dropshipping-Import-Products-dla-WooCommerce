@@ -1,0 +1,34 @@
+parameters:
+    level: 6
+    paths:
+        - dropshipping-import-products.php
+        - uninstall.php
+        - includes/
+    excludePaths:
+        - vendor/
+        - node_modules/
+        - tests/
+    bootstrapFiles:
+        - tests/stubs/wp-functions.php
+        - tests/stubs/wc-functions.php
+    scanFiles:
+        - includes/data/class-dip-db.php
+        - includes/class-dip-logger.php
+        - includes/importer/class-dip-feed-manager.php
+        - includes/importer/class-dip-xml-parser.php
+        - includes/importer/class-dip-csv-parser.php
+        - includes/importer/class-dip-field-mapper.php
+        - includes/processor/class-dip-price-rules.php
+        - includes/processor/class-dip-category-handler.php
+        - includes/processor/class-dip-image-handler.php
+        - includes/processor/class-dip-product-processor.php
+        - includes/sync/class-dip-matcher.php
+        - includes/sync/class-dip-sync-runner.php
+        - includes/scheduler/class-dip-scheduler.php
+        - includes/admin/class-dip-admin-settings.php
+        - includes/admin/class-dip-admin-feeds.php
+        - includes/admin/class-dip-admin-logs.php
+        - includes/admin/class-dip-admin.php
+    phpVersion: 80000
+    checkMissingIterableValueType: false
+    treatPhpDocTypesAsCertain: false
