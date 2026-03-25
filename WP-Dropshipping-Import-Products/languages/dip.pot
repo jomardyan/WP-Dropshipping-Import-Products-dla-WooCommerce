@@ -1,0 +1,614 @@
+# Copyright (C) 2024 Dropshipping Import Products dla WooCommerce
+# This file is distributed under the same license as the Dropshipping Import Products dla WooCommerce package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Dropshipping Import Products dla WooCommerce 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-dropshipping-import-products\n"
+"POT-Creation-Date: 2024-01-01 00:00+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2024-01-01 00:00+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"X-Generator: WP-CLI 2.x\n"
+"X-Domain: dip\n"
+
+#. Plugin Name of the plugin
+msgid "Dropshipping Import Products dla WooCommerce"
+msgstr ""
+
+#. Plugin URI of the plugin
+msgid "https://example.com/dropshipping-import-products"
+msgstr ""
+
+#. Description of the plugin
+msgid "Bulk import and scheduled synchronization of products from XML and CSV feeds into WooCommerce. Supports dropshipping workflows, drag-and-drop field mapping, price rules, conditional logic, and Action Scheduler-based sync."
+msgstr ""
+
+#. Author of the plugin
+msgid "Your Name"
+msgstr ""
+
+#: dropshipping-import-products.php
+msgid "Dropshipping Import Products requires WooCommerce to be installed and active."
+msgstr ""
+
+#: includes/admin/class-dip-admin.php
+msgid "Import Products"
+msgstr ""
+
+#: includes/admin/class-dip-admin.php
+msgid "Import Logs"
+msgstr ""
+
+#: includes/admin/class-dip-admin.php
+msgid "Import Settings"
+msgstr ""
+
+#: includes/admin/class-dip-admin.php
+msgid "Permission denied."
+msgstr ""
+
+#: includes/admin/class-dip-admin.php
+msgid "Invalid feed ID."
+msgstr ""
+
+#: includes/admin/class-dip-admin.php
+msgid "Import completed."
+msgstr ""
+
+#: includes/admin/class-dip-admin.php
+msgid "Source URL is required."
+msgstr ""
+
+#: includes/admin/class-dip-admin.php
+msgid "Failed to fetch feed."
+msgstr ""
+
+#: includes/admin/class-dip-admin.php
+msgid "Running\xe2\x80\xa6"
+msgstr ""
+
+#: includes/admin/class-dip-admin.php
+msgid "Done"
+msgstr ""
+
+#: includes/admin/class-dip-admin.php
+msgid "Error"
+msgstr ""
+
+#: includes/admin/class-dip-admin.php
+msgid "Delete this feed? This cannot be undone."
+msgstr ""
+
+#: includes/admin/class-dip-admin.php
+msgid "Drag to reorder"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Import Feeds"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Add New Feed"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Edit Feed"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Feed Name"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Source URL"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Type"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Status"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Last Run"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Actions"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Active"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Paused"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Never"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Edit"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Delete"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Run Now"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "No feeds configured yet."
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Basic Settings"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Name"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Feed URL (XML or CSV)"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Feed Type"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "XML"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "CSV"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "XML Item Node"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "XML element name that wraps each product. Leave blank to auto-detect."
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "CSV Delimiter"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Auto-detect"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Feed Status"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Field Mapping"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Detect Fields"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Preview Feed (5 rows)"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Source Field"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "WooCommerce Field"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Default / Template"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Add Mapping Row"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Product Matching"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Match by SKU"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Match by EAN/GTIN"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Match by Product Name"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Match by Custom Meta Key"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Custom Meta Key"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Update Behaviour"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Create products as Draft"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Fields to Update on Existing Products"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Update all fields"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Price Rules"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Rules are applied to the regular price in order."
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Rule Type"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Value"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Remove"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Add Rule"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Conditional Logic"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Skip records that do not match ALL conditions below."
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Field"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Operator"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Add Condition"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Schedule"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Sync Interval"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Manual only"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Every hour"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Every 2 hours"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Every 6 hours"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Every 12 hours"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Every day"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Every week"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Next run:"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Save Feed"
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Feed saved successfully."
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Feed deleted."
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Feed not found."
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Invalid request."
+msgstr ""
+
+#: includes/admin/class-dip-admin-feeds.php
+msgid "Feed name is required."
+msgstr ""
+
+#: includes/admin/class-dip-admin-logs.php
+msgid "Import Logs"
+msgstr ""
+
+#: includes/admin/class-dip-admin-logs.php
+msgid "All Feeds"
+msgstr ""
+
+#: includes/admin/class-dip-admin-logs.php
+msgid "Run #%d"
+msgstr ""
+
+#: includes/admin/class-dip-admin-logs.php
+msgid "Runs"
+msgstr ""
+
+#: includes/admin/class-dip-admin-logs.php
+msgid "Started"
+msgstr ""
+
+#: includes/admin/class-dip-admin-logs.php
+msgid "Finished"
+msgstr ""
+
+#: includes/admin/class-dip-admin-logs.php
+msgid "Created"
+msgstr ""
+
+#: includes/admin/class-dip-admin-logs.php
+msgid "Updated"
+msgstr ""
+
+#: includes/admin/class-dip-admin-logs.php
+msgid "Skipped"
+msgstr ""
+
+#: includes/admin/class-dip-admin-logs.php
+msgid "Errors"
+msgstr ""
+
+#: includes/admin/class-dip-admin-logs.php
+msgid "View Log"
+msgstr ""
+
+#: includes/admin/class-dip-admin-logs.php
+msgid "No runs found for this feed."
+msgstr ""
+
+#: includes/admin/class-dip-admin-logs.php
+msgid "Log for Run #%d"
+msgstr ""
+
+#: includes/admin/class-dip-admin-logs.php
+msgid "Record #"
+msgstr ""
+
+#: includes/admin/class-dip-admin-logs.php
+msgid "Product"
+msgstr ""
+
+#: includes/admin/class-dip-admin-logs.php
+msgid "Message"
+msgstr ""
+
+#: includes/admin/class-dip-admin-logs.php
+msgid "Time"
+msgstr ""
+
+#: includes/admin/class-dip-admin-logs.php
+msgid "\xe2\x86\x90 Back to runs"
+msgstr ""
+
+#: includes/admin/class-dip-admin-logs.php
+msgid "\xe2\x86\x90 Back to feeds"
+msgstr ""
+
+#: includes/admin/class-dip-admin-settings.php
+msgid "Import Settings"
+msgstr ""
+
+#: includes/admin/class-dip-admin-settings.php
+msgid "HTTP Timeout (seconds)"
+msgstr ""
+
+#: includes/admin/class-dip-admin-settings.php
+msgid "Timeout for fetching remote feed files."
+msgstr ""
+
+#: includes/admin/class-dip-admin-settings.php
+msgid "Log Retention (days)"
+msgstr ""
+
+#: includes/admin/class-dip-admin-settings.php
+msgid "Log entries older than this will be deleted automatically. Set to 0 to keep all."
+msgstr ""
+
+#: includes/admin/class-dip-admin-settings.php
+msgid "Debug Mode"
+msgstr ""
+
+#: includes/admin/class-dip-admin-settings.php
+msgid "Log verbose debug information."
+msgstr ""
+
+#: includes/admin/class-dip-admin-settings.php
+msgid "Delete Data on Uninstall"
+msgstr ""
+
+#: includes/admin/class-dip-admin-settings.php
+msgid "Remove all feeds, logs, and settings when the plugin is deleted."
+msgstr ""
+
+#: includes/admin/class-dip-admin-settings.php
+msgid "Save Settings"
+msgstr ""
+
+#: includes/admin/class-dip-admin-settings.php
+msgid "Settings saved."
+msgstr ""
+
+#: includes/importer/class-dip-field-mapper.php
+msgid "Product Name"
+msgstr ""
+
+#: includes/importer/class-dip-field-mapper.php
+msgid "SKU"
+msgstr ""
+
+#: includes/importer/class-dip-field-mapper.php
+msgid "Description"
+msgstr ""
+
+#: includes/importer/class-dip-field-mapper.php
+msgid "Short Description"
+msgstr ""
+
+#: includes/importer/class-dip-field-mapper.php
+msgid "Regular Price"
+msgstr ""
+
+#: includes/importer/class-dip-field-mapper.php
+msgid "Sale Price"
+msgstr ""
+
+#: includes/importer/class-dip-field-mapper.php
+msgid "Stock Quantity"
+msgstr ""
+
+#: includes/importer/class-dip-field-mapper.php
+msgid "Manage Stock"
+msgstr ""
+
+#: includes/importer/class-dip-field-mapper.php
+msgid "Stock Status"
+msgstr ""
+
+#: includes/importer/class-dip-field-mapper.php
+msgid "Weight"
+msgstr ""
+
+#: includes/importer/class-dip-field-mapper.php
+msgid "Length"
+msgstr ""
+
+#: includes/importer/class-dip-field-mapper.php
+msgid "Width"
+msgstr ""
+
+#: includes/importer/class-dip-field-mapper.php
+msgid "Height"
+msgstr ""
+
+#: includes/importer/class-dip-field-mapper.php
+msgid "External / Affiliate URL"
+msgstr ""
+
+#: includes/importer/class-dip-field-mapper.php
+msgid "Button Text (Affiliate)"
+msgstr ""
+
+#: includes/importer/class-dip-field-mapper.php
+msgid "Catalog Visibility"
+msgstr ""
+
+#: includes/importer/class-dip-field-mapper.php
+msgid "Product Status"
+msgstr ""
+
+#: includes/importer/class-dip-field-mapper.php
+msgid "Categories"
+msgstr ""
+
+#: includes/importer/class-dip-field-mapper.php
+msgid "Tags"
+msgstr ""
+
+#: includes/importer/class-dip-field-mapper.php
+msgid "Attributes"
+msgstr ""
+
+#: includes/importer/class-dip-field-mapper.php
+msgid "Main Image URL"
+msgstr ""
+
+#: includes/importer/class-dip-field-mapper.php
+msgid "Gallery Image URLs"
+msgstr ""
+
+#: includes/importer/class-dip-field-mapper.php
+msgid "EAN / GTIN"
+msgstr ""
+
+#: includes/importer/class-dip-field-mapper.php
+msgid "Brand"
+msgstr ""
+
+#: includes/importer/class-dip-field-mapper.php
+msgid "Custom Meta Field"
+msgstr ""
+
+#: includes/processor/class-dip-product-processor.php
+msgid "Skipped by conditional logic."
+msgstr ""
+
+#: includes/processor/class-dip-product-processor.php
+msgid "Failed to load existing product."
+msgstr ""
+
+#: includes/processor/class-dip-product-processor.php
+msgid "Updated product ID %d."
+msgstr ""
+
+#: includes/processor/class-dip-product-processor.php
+msgid "Created product ID %d."
+msgstr ""
+
+#: includes/sync/class-dip-sync-runner.php
+msgid "Failed to fetch feed from: %s"
+msgstr ""

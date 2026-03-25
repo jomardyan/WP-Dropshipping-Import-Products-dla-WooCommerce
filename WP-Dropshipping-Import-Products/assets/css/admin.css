@@ -1,0 +1,230 @@
+/* ==========================================================================
+   Dropshipping Import Products dla WooCommerce — Admin Styles
+   ========================================================================== */
+
+/* Wrap & Layout */
+.dip-wrap h2 {
+	margin-top: 2em;
+	border-bottom: 1px solid #ddd;
+	padding-bottom: 6px;
+}
+
+/* Status Badges */
+.dip-status {
+	display: inline-block;
+	padding: 2px 8px;
+	border-radius: 3px;
+	font-size: 12px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+}
+
+.dip-status--active,
+.dip-status--done {
+	background: #d4f7dc;
+	color: #1a6632;
+}
+
+.dip-status--paused {
+	background: #fff3cd;
+	color: #856404;
+}
+
+.dip-status--error {
+	background: #fde8e8;
+	color: #8b1a1a;
+}
+
+.dip-status--running,
+.dip-status--pending {
+	background: #e0eaff;
+	color: #1a3b8b;
+}
+
+.dip-status--skipped,
+.dip-status--info {
+	background: #f0f0f0;
+	color: #555;
+}
+
+.dip-status--created {
+	background: #d4f7dc;
+	color: #1a6632;
+}
+
+.dip-status--updated {
+	background: #d0eaff;
+	color: #0a3d6b;
+}
+
+/* Feeds Table */
+.dip-feeds-table td,
+.dip-feeds-table th {
+	vertical-align: middle;
+}
+
+.dip-actions {
+	white-space: nowrap;
+}
+
+/* ── Field Mapping Builder ──────────────────────────────────────────────── */
+#dip-mapping-builder {
+	margin-top: 12px;
+}
+
+.dip-mapping-table {
+	border-collapse: collapse;
+	margin-bottom: 8px;
+}
+
+.dip-mapping-table th,
+.dip-mapping-table td {
+	padding: 6px 8px;
+	border: 1px solid #ddd;
+	vertical-align: middle;
+}
+
+.dip-mapping-table thead th {
+	background: #f8f8f8;
+	font-weight: 600;
+}
+
+.dip-mapping-row td {
+	background: #fff;
+}
+
+.dip-mapping-row.ui-sortable-helper {
+	opacity: 0.75;
+	box-shadow: 0 4px 12px rgba(0,0,0,.15);
+}
+
+.dip-drag-handle {
+	cursor: grab;
+	color: #999;
+	text-align: center;
+	user-select: none;
+	width: 30px;
+}
+
+.dip-drag-handle:active {
+	cursor: grabbing;
+}
+
+.dip-select-target {
+	min-width: 220px;
+}
+
+.dip-remove-row {
+	color: #a00;
+	font-size: 18px;
+	line-height: 1;
+	cursor: pointer;
+	border: none;
+	background: none;
+	padding: 0 4px;
+}
+
+.dip-remove-row:hover {
+	color: #c00;
+}
+
+/* ── Price Rules Builder ────────────────────────────────────────────────── */
+#dip-price-rules-rows,
+#dip-conditions-rows {
+	margin-bottom: 8px;
+}
+
+.dip-price-rule-row,
+.dip-condition-row {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-bottom: 6px;
+	padding: 6px 8px;
+	background: #fafafa;
+	border: 1px solid #eee;
+	border-radius: 3px;
+}
+
+.dip-price-rule-row select,
+.dip-condition-row select {
+	min-width: 180px;
+}
+
+.dip-price-rule-row input[type="number"],
+.dip-condition-row input[type="text"] {
+	width: 120px;
+}
+
+/* ── Preview Area ───────────────────────────────────────────────────────── */
+#dip-preview-area {
+	margin-top: 24px;
+	padding: 16px;
+	background: #f9f9f9;
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	overflow-x: auto;
+}
+
+#dip-preview-area table {
+	border-collapse: collapse;
+	font-size: 13px;
+	min-width: 100%;
+}
+
+#dip-preview-area th,
+#dip-preview-area td {
+	border: 1px solid #ddd;
+	padding: 4px 8px;
+	white-space: nowrap;
+	max-width: 200px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+#dip-preview-area th {
+	background: #f0f0f0;
+	font-weight: 600;
+}
+
+/* ── Log Table ──────────────────────────────────────────────────────────── */
+.dip-log-table td {
+	vertical-align: top;
+}
+
+.dip-log-row--error td {
+	background: #fff8f8;
+}
+
+.dip-log-row--created td {
+	background: #f8fff9;
+}
+
+.dip-log-row--skipped td {
+	color: #888;
+}
+
+/* ── Live region ────────────────────────────────────────────────────────── */
+#dip-import-status {
+	display: inline-block;
+	margin-left: 12px;
+	font-weight: 600;
+}
+
+/* ── Spinner ────────────────────────────────────────────────────────────── */
+.dip-spinner {
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	border: 2px solid #ccc;
+	border-top-color: #2271b1;
+	border-radius: 50%;
+	animation: dip-spin 0.7s linear infinite;
+	vertical-align: middle;
+	margin-right: 6px;
+}
+
+@keyframes dip-spin {
+	to { transform: rotate(360deg); }
+}
